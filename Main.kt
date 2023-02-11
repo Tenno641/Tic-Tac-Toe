@@ -1,5 +1,3 @@
-package com.example.myapplication
-
 fun initGame(gameBoard: String) {
     println("---------")
     println("| ${gameBoard[0]} ${gameBoard[1]} ${gameBoard[2]} |")
