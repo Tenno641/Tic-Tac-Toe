@@ -7,83 +7,106 @@ fun initGame(gameBoard: String) {
 }
 
 fun main() {
+    var board = "         "
+    initGame(board)
 
-    val turns = readln()
-    initGame(turns)
     var test = ""
 
-    do {
-        var check = false
+    for (turn in 0..8) {
 
-        val switch = readln()
+        val player = if (turn % 2 == 0) 'X' else 'O'
 
-        if (switch[0] in 'a'..'z') {
-            println("You should enter numbers!")
-            check = true
-        }
+        do {
+            var check = false
 
-        if (switch[0] > '3') {
-            println("Coordinates should be from 1 to 3!")
-            check = true
-        }
+            val switch = readln()
 
-        if (switch[0] == '1') {
-            val see1 = switch[2].toString().toInt() - switch[0].toString().toInt()
-            if (turns[see1] != '_') {
-                println("This cell is occupied! Choose another one!")
+            if (switch[0] in 'a'..'z') {
+                println("You should enter numbers!")
                 check = true
+                continue
             }
-        }
 
-        if (switch[0] == '2') {
-            val see2 = switch[2].toString().toInt() + switch[0].toString().toInt()
-            if (turns[see2] != '_') {
-                println("This cell is occupied! Choose another one!")
+            if (switch[0] > '3' || switch[2] > '3') {
+                println("Coordinates should be from 1 to 3!")
                 check = true
+                continue
             }
-        }
 
-        if (switch[0] == '3') {
-            val see3 = switch[0].toString().toInt() * 2 + switch[2].toString().toInt() - 1
-            if (turns[see3] != '_') {
-                println("This cell is occupied! Choose another one!")
-                check = true
+            if (switch[0] == '1') {
+                val see1 = switch[2].toString().toInt() - switch[0].toString().toInt()
+                if (board[see1] != ' ') {
+                    println("This cell is occupied! Choose another one!")
+                    check = true
+                    continue
+                }
             }
-        }
 
-        if (!check) {
+            if (switch[0] == '2') {
+                val see2 = switch[2].toString().toInt() + switch[0].toString().toInt()
+                if (board[see2] != ' ') {
+                    println("This cell is occupied! Choose another one!")
+                    check = true
+                    continue
+                }
+            }
+
+            if (switch[0] == '3') {
+                val see3 = switch[0].toString().toInt() * 2 + switch[2].toString().toInt() - 1
+                if (board[see3] != ' ') {
+                    println("This cell is occupied! Choose another one!")
+                    check = true
+                    continue
+                }
+            }
+
             test = switch.substring(0,3)
+
+        } while (check)
+
+        if (test[0] == '1') {
+            val idx = test[2].toString().toInt() - test[0].toString().toInt()
+
+            val fin1 = board.substring(0, idx)
+            val fin2 = board.substring(idx + 1)
+
+            board = fin1 + player + fin2
+            initGame(board)
         }
 
-    } while (check)
+        else if (test[0] == '2') {
+            val idx = test[2].toString().toInt() + test[0].toString().toInt()
 
-    if (test[0] == '1') {
-        val idx = test[2].toString().toInt() - test[0].toString().toInt()
+            val fin1 = board.substring(0, idx)
+            val fin2 = board.substring(idx + 1)
 
-        val fin1 = turns.substring(0, idx)
-        val fin2 = turns.substring(idx + 1)
+            board = fin1 + player + fin2
+            initGame(board)
+        }
 
-        val done = fin1 + 'X' + fin2
-        initGame(done)
-    }
+        else {
+            val idx = test[0].toString().toInt() * 2 + test[2].toString().toInt() - 1
 
-    else if (test[0] == '2') {
-        val idx = test[2].toString().toInt() + test[0].toString().toInt()
+            val fin1 = board.substring(0, idx)
+            val fin2 = board.substring(idx + 1)
 
-        val fin1 = turns.substring(0, idx)
-        val fin2 = turns.substring(idx + 1)
+            board = fin1 + player + fin2
+            initGame(board)
+        }
 
-        val done = fin1 + 'X' + fin2
-        initGame(done)
-    }
+        when {
+            (board[0] == 'X' || board [0] == 'O') && board[0] == board[1] && board[1] == board[2] -> { print("${board[0]} wins"); break}
+            (board[3] == 'X' || board [3] == 'O') && board[3] == board[4] && board[4] == board[5] -> { print("${board[3]} wins"); break}
+            (board[6] == 'X' || board [6] == 'O') && board[6] == board[7] && board[7] == board[8] -> { print("${board[6]} wins"); break}
 
-    else {
-        val idx = test[0].toString().toInt() * 2 + test[2].toString().toInt() - 1
+            (board[0] == 'X' || board [0] == 'O') && board[0] == board[3] && board[3] == board[6] -> { print("${board[0]} wins"); break}
+            (board[1] == 'X' || board [1] == 'O') && board[1] == board[4] && board[4] == board[7] -> { print("${board[1]} wins"); break}
+            (board[2] == 'X' || board [2] == 'O') && board[2] == board[5] && board[5] == board[8] -> { print("${board[2]} wins"); break}
 
-        val fin1 = turns.substring(0, idx)
-        val fin2 = turns.substring(idx + 1)
+            (board[0] == 'X' || board [0] == 'O') && board[0] == board[4] && board[4] == board[8] -> { print("${board[0]} wins"); break}
+            (board[2] == 'X' || board [2] == 'O') && board[2] == board[4] && board[4] == board[6] -> { print("${board[2]} wins"); break}
 
-        val done = fin1 + 'X' + fin2
-        initGame(done)
+            else -> {}
+        }
     }
 }
